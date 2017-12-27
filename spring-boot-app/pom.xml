@@ -6,7 +6,7 @@
 
   <groupId>com.xala3pa</groupId>
   <artifactId>spring-boot-app</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
 
   <name>spring-boot-app</name>
@@ -40,6 +40,16 @@
     <dependency>
       <groupId>com.xala3pa</groupId>
       <artifactId>spring-boot-jpa</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.xala3pa</groupId>
+      <artifactId>spring-boot-mvc</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.xala3pa</groupId>
+      <artifactId>domain</artifactId>
       <version>${project.version}</version>
     </dependency>
   </dependencies>
