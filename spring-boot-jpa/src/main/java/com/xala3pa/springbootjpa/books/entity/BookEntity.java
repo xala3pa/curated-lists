@@ -1,4 +1,4 @@
-package com.xala3pa.springbootjpa.entity;
+package com.xala3pa.springbootjpa.books.entity;
 
 import java.util.Date;
 import javax.persistence.Entity;

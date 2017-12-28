@@ -1,11 +1,11 @@
-package com.xala3pa.springbootjpa;
+package com.xala3pa.springbootjpa.books;
 
 
 import com.xala3pa.books.Book;
 import com.xala3pa.books.BookCategory;
 import com.xala3pa.books.gateway.BookGateway;
-import com.xala3pa.springbootjpa.entity.BookEntity;
-import com.xala3pa.springbootjpa.repository.BookRepository;
+import com.xala3pa.springbootjpa.books.entity.BookEntity;
+import com.xala3pa.springbootjpa.books.repository.BookRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
