@@ -1,4 +1,4 @@
-package com.xala3pa.springbootapp;
+package com.xala3pa;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
