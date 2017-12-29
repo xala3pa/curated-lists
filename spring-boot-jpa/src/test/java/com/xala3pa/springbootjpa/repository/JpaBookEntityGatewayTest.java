@@ -14,11 +14,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.assertj.core.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
+@ContextConfiguration(classes = {RepositoryConfig.class})
 @DataJpaTest
 public class JpaBookEntityGatewayTest {
 
@@ -48,11 +50,5 @@ public class JpaBookEntityGatewayTest {
 
     assertThat(uncleBobBooks.size()).isNotZero();
     assertThat(uncleBobBooks.get(0).getIsbn()).isEqualTo(ISBN);
-  }
-
-  @SpringBootApplication
-  @Import(RepositoryConfig.class)
-  static class TestConfiguration {
-
   }
 }

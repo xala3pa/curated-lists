@@ -9,7 +9,9 @@ import com.xala3pa.springbootjpa.books.repository.BookRepository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class JpaBookEntityGateway implements BookGateway {
 
   private final BookRepository bookRepository;
