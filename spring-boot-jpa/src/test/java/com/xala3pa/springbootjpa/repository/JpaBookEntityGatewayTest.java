@@ -7,13 +7,12 @@ import com.xala3pa.springbootjpa.books.entity.BookEntity;
 import com.xala3pa.springbootjpa.books.entity.BookEntityCategory;
 import com.xala3pa.springbootjpa.books.entity.BookEntityStatus;
 import java.util.List;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -26,6 +25,7 @@ public class JpaBookEntityGatewayTest {
 
   private static final long ISBN = 9780134494166L;
   private static final String ROBERT_C_MARTIN = "Robert C. Martin";
+  private static final String CLEAN_ARCHITECTURE = "Clean Architecture";
 
   @Autowired
   private TestEntityManager testEntityManager;
@@ -33,10 +33,12 @@ public class JpaBookEntityGatewayTest {
   @Autowired
   private JpaBookEntityGateway jpaBookEntityGateway;
 
-  @Test
-  public void testFindByAuthor() {
-    BookEntity cleanArchitectureBook = BookEntity.builder()
-        .title("Clean Architecture")
+  private BookEntity cleanArchitectureBook;
+
+  @Before
+  public void setUp() {
+    cleanArchitectureBook = BookEntity.builder()
+        .title(CLEAN_ARCHITECTURE)
         .isbn(ISBN)
         .author(ROBERT_C_MARTIN)
         .description("Clean Architecture, a Craftsman's Guide to Software Structure and Design")
@@ -45,10 +47,25 @@ public class JpaBookEntityGatewayTest {
         .build();
 
     testEntityManager.persist(cleanArchitectureBook);
+  }
+
+
+  @Test
+  public void testFindByAuthor() {
 
     List<Book> uncleBobBooks = jpaBookEntityGateway.findByAuthor(ROBERT_C_MARTIN);
 
     assertThat(uncleBobBooks.size()).isNotZero();
     assertThat(uncleBobBooks.get(0).getIsbn()).isEqualTo(ISBN);
+  }
+
+  @Test
+  public void testGetBookByIsbn() {
+
+    Book uncleBobBook = jpaBookEntityGateway.getBookByIsbn(ISBN);
+
+    assertThat(uncleBobBook)
+        .isEqualToComparingFieldByField(jpaBookEntityGateway
+            .mapToBook(cleanArchitectureBook));
   }
 }

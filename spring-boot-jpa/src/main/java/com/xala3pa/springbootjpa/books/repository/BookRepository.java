@@ -10,5 +10,5 @@ public interface BookRepository extends CrudRepository<BookEntity, Long> {
 
   List<BookEntity> findByAuthor(String author);
 
-  BookEntity getBookByIsbn(String isbn);
+  BookEntity getBookByIsbn(Long isbn);
 }

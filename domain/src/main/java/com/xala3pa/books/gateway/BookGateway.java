@@ -7,5 +7,5 @@ public interface BookGateway {
 
   List<Book> findAll();
   List<Book> findByAuthor(String author);
-  Book getBookByIsbn(String isbn);
+  Book getBookByIsbn(Long isbn);
 }

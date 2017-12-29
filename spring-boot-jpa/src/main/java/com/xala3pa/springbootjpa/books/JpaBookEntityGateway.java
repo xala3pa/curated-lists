@@ -3,6 +3,7 @@ package com.xala3pa.springbootjpa.books;
 
 import com.xala3pa.books.Book;
 import com.xala3pa.books.BookCategory;
+import com.xala3pa.books.BookStatus;
 import com.xala3pa.books.gateway.BookGateway;
 import com.xala3pa.springbootjpa.books.entity.BookEntity;
 import com.xala3pa.springbootjpa.books.repository.BookRepository;
@@ -35,17 +36,18 @@ public class JpaBookEntityGateway implements BookGateway {
   }
 
   @Override
-  public Book getBookByIsbn(String isbn) {
+  public Book getBookByIsbn(Long isbn) {
     return mapToBook(bookRepository.getBookByIsbn(isbn));
   }
 
-  private Book mapToBook(BookEntity bookEntity) {
+  public Book mapToBook(BookEntity bookEntity) {
     return Book.builder()
         .isbn(bookEntity.getIsbn())
         .title(bookEntity.getTitle())
         .author(bookEntity.getAuthor())
         .description(bookEntity.getDescription())
         .bookCategory(BookCategory.valueOf(bookEntity.getBookCategory().name()))
+        .bookStatus(BookStatus.valueOf(bookEntity.getBookStatus().name()))
         .consumed(bookEntity.getConsumed())
         .dateAdded(bookEntity.getDateAdded()).build();
   }
