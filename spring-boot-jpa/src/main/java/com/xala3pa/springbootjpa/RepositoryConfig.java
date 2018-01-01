@@ -1,4 +1,4 @@
-package com.xala3pa.springbootjpa.books;
+package com.xala3pa.springbootjpa;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;

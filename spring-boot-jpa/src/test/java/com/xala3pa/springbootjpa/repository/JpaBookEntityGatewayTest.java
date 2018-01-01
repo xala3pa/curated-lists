@@ -2,7 +2,7 @@ package com.xala3pa.springbootjpa.repository;
 
 import com.xala3pa.books.Book;
 import com.xala3pa.springbootjpa.books.JpaBookEntityGateway;
-import com.xala3pa.springbootjpa.books.RepositoryConfig;
+import com.xala3pa.springbootjpa.RepositoryConfig;
 import com.xala3pa.springbootjpa.books.entity.BookEntity;
 import com.xala3pa.springbootjpa.books.entity.BookEntityCategory;
 import com.xala3pa.springbootjpa.books.entity.BookEntityStatus;
