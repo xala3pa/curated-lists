@@ -5,7 +5,7 @@ import com.xala3pa.books.outputData.BookOutputData;
 import java.util.List;
 
 @FunctionalInterface
-public interface GetBookListByAuthor {
+public interface BookListByAuthor {
 
-  List<BookOutputData> getBookListByAuthor(BookListByAuthorInputData bookListByAuthorInputData);
+  List<BookOutputData> getBooks(BookListByAuthorInputData bookListByAuthorInputData);
 }
