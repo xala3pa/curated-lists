@@ -3,7 +3,8 @@ package com.xala3pa.books.Interactor;
 import com.xala3pa.books.Book;
 import com.xala3pa.books.BookCategory;
 import com.xala3pa.books.BookStatus;
-import com.xala3pa.books.Boundary.BookListByAuthor;
+import com.xala3pa.books.boundary.BookListByAuthor;
+import com.xala3pa.books.exception.BooksNotFoundException;
 import com.xala3pa.books.gateway.BookGateway;
 import com.xala3pa.books.inputData.BookListByAuthorInputData;
 import com.xala3pa.books.outputData.BookOutputData;
@@ -21,6 +22,10 @@ public class GetBookListsByAuthor implements BookListByAuthor {
   @Override
   public List<BookOutputData> getBooks(BookListByAuthorInputData bookListByAuthorInputData) {
     List<Book> books = bookGateway.findByAuthor(bookListByAuthorInputData.getAuthor());
+
+    if (books.isEmpty()) {
+      throw new BooksNotFoundException();
+    }
 
     return books.stream().map(this::mapToBookOutputData).collect(Collectors.toList());
   }

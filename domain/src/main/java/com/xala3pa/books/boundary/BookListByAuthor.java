@@ -1,4 +1,4 @@
-package com.xala3pa.books.Boundary;
+package com.xala3pa.books.boundary;
 
 import com.xala3pa.books.inputData.BookListByAuthorInputData;
 import com.xala3pa.books.outputData.BookOutputData;
