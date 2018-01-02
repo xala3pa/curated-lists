@@ -1,5 +1,6 @@
 package com.xala3pa.springbootmvc.books.controller;
 
+import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -7,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.xala3pa.books.boundary.BookListByAuthor;
+import com.xala3pa.books.exception.BooksNotFoundException;
 import com.xala3pa.books.inputData.BookListByAuthorInputData;
 import com.xala3pa.books.outputData.BookOutputData;
 import com.xala3pa.springbootmvc.MVCConfig;
@@ -37,7 +39,7 @@ public class BookControllerTest {
   private BookListByAuthor bookListByAuthor;
 
   @Test
-  public void booksByAuthor() throws Exception {
+  public void should_return_books_by_author() throws Exception {
     BookListByAuthorInputData books = BookListByAuthorInputData.builder().author(ROBERT_C_MARTIN)
         .build();
 
@@ -52,5 +54,15 @@ public class BookControllerTest {
     this.mockMvc.perform(get(BOOK_URL_TEMPLATE))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[0].title").value(BOOK_TITLE));
+  }
+
+  @Test
+  public void should_return_BooksNotFoundException_when_no_books() throws Exception {
+
+    when(bookListByAuthor.getBooks(any(BookListByAuthorInputData.class)))
+        .thenThrow(new BooksNotFoundException());
+
+    this.mockMvc.perform(get(BOOK_URL_TEMPLATE))
+        .andExpect(status().isNotFound());
   }
 }
