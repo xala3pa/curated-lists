@@ -1,5 +1,6 @@
 package com.xala3pa.books;
 
+import com.xala3pa.books.outputData.BookOutputData;
 import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,5 +21,16 @@ public class Book {
   private String author;
   private Date dateAdded;
   private Date consumed;
+
+  public BookOutputData mapToBookOutputData() {
+    return BookOutputData.builder()
+        .isbn(getIsbn())
+        .author(getAuthor())
+        .description(getDescription())
+        .bookCategory(BookCategory.valueOf(getBookCategory().name()))
+        .bookStatus(BookStatus.valueOf(getBookStatus().name()))
+        .consumed(getConsumed())
+        .dateAdded(getDateAdded()).build();
+  }
 }
 

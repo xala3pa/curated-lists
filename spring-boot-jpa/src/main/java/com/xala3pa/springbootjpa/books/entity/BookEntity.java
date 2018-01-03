@@ -1,5 +1,8 @@
 package com.xala3pa.springbootjpa.books.entity;
 
+import com.xala3pa.books.Book;
+import com.xala3pa.books.BookCategory;
+import com.xala3pa.books.BookStatus;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,4 +27,16 @@ public class BookEntity {
   private String author;
   private Date dateAdded;
   private Date consumed;
+
+  public Book mapToBook() {
+    return Book.builder()
+        .isbn(getIsbn())
+        .title(getTitle())
+        .author(getAuthor())
+        .description(getDescription())
+        .bookCategory(BookCategory.valueOf(getBookCategory().name()))
+        .bookStatus(BookStatus.valueOf(getBookStatus().name()))
+        .consumed(getConsumed())
+        .dateAdded(getDateAdded()).build();
+  }
 }
