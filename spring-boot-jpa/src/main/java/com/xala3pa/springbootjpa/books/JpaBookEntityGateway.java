@@ -28,10 +28,10 @@ public class JpaBookEntityGateway implements BookGateway {
   }
 
   @Override
-  public List<Book> findByAuthor(String author) {
-    return bookRepository.findByAuthor(author).stream()
-        .map(BookEntity::mapToBook)
-        .collect(Collectors.toList());
+  public Optional<List<Book>> findByAuthor(String author) {
+    return bookRepository.findByAuthor(author)
+        .map(bookEntities -> bookEntities.stream().map(BookEntity::mapToBook)
+            .collect(Collectors.toList()));
   }
 
   @Override

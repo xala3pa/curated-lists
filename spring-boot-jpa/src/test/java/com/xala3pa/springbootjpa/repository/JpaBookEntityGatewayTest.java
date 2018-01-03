@@ -50,11 +50,10 @@ public class JpaBookEntityGatewayTest {
     testEntityManager.persist(cleanArchitectureBook);
   }
 
-
   @Test
   public void testFindByAuthor() {
 
-    List<Book> uncleBobBooks = jpaBookEntityGateway.findByAuthor(ROBERT_C_MARTIN);
+    List<Book> uncleBobBooks = jpaBookEntityGateway.findByAuthor(ROBERT_C_MARTIN).get();
 
     assertThat(uncleBobBooks.size()).isNotZero();
     assertThat(uncleBobBooks.get(0).getIsbn()).isEqualTo(ISBN);
