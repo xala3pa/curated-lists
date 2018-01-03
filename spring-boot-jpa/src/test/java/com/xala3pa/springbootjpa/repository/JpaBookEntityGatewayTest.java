@@ -7,6 +7,7 @@ import com.xala3pa.springbootjpa.books.entity.BookEntity;
 import com.xala3pa.springbootjpa.books.entity.BookEntityCategory;
 import com.xala3pa.springbootjpa.books.entity.BookEntityStatus;
 import java.util.List;
+import java.util.Optional;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,10 +63,9 @@ public class JpaBookEntityGatewayTest {
   @Test
   public void testGetBookByIsbn() {
 
-    Book uncleBobBook = jpaBookEntityGateway.getBookByIsbn(ISBN);
+    Optional<Book> uncleBobBook = jpaBookEntityGateway.getBookByIsbn(ISBN);
 
-    assertThat(uncleBobBook)
-        .isEqualToComparingFieldByField(jpaBookEntityGateway
-            .mapToBook(cleanArchitectureBook));
+    assertThat(uncleBobBook.get())
+        .isEqualToComparingFieldByField(cleanArchitectureBook.mapToBook());
   }
 }
