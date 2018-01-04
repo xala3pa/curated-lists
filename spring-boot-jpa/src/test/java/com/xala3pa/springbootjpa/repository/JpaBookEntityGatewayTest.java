@@ -51,7 +51,7 @@ public class JpaBookEntityGatewayTest {
   }
 
   @Test
-  public void testFindByAuthor() {
+  public void should_return_books_by_author() {
 
     List<Book> uncleBobBooks = jpaBookEntityGateway.findByAuthor(ROBERT_C_MARTIN).get();
 
@@ -60,7 +60,7 @@ public class JpaBookEntityGatewayTest {
   }
 
   @Test
-  public void testGetBookByIsbn() {
+  public void should_return_books_by_isbn() {
 
     Optional<Book> uncleBobBook = jpaBookEntityGateway.getBookByIsbn(ISBN);
 
