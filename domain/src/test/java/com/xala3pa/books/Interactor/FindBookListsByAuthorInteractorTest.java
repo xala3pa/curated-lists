@@ -22,7 +22,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class GetBookListsByAuthorTest {
+public class FindBookListsByAuthorInteractorTest {
 
   private static final long ISBN = 9780134494166L;
   private static final String ROBERT_C_MARTIN = "Robert C. Martin";
@@ -34,7 +34,7 @@ public class GetBookListsByAuthorTest {
   private BookGateway bookGateway;
 
   @InjectMocks
-  private GetBookListsByAuthor getBookListsByAuthor = new GetBookListsByAuthor(bookGateway);
+  private FindBookListsByAuthorInteractor getBookListsByAuthor = new FindBookListsByAuthorInteractor(bookGateway);
 
   @Before
   public void setUp() {

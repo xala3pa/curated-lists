@@ -1,7 +1,7 @@
 package com.xala3pa.springbootmvc.books.controller;
 
-import com.xala3pa.books.boundary.BookByIsbn;
-import com.xala3pa.books.boundary.BookListByAuthor;
+import com.xala3pa.books.boundary.FindBookByIsbn;
+import com.xala3pa.books.boundary.FindBookListByAuthor;
 import com.xala3pa.books.exception.BooksNotFoundException;
 import com.xala3pa.books.inputData.BookByIsbnInputData;
 import com.xala3pa.books.inputData.BookListByAuthorInputData;
@@ -21,20 +21,20 @@ public class BookController {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(BookController.class);
 
-  private BookListByAuthor bookListByAuthor;
-  private BookByIsbn bookByIsbn;
+  private FindBookListByAuthor findBookListByAuthor;
+  private FindBookByIsbn findBookByIsbn;
 
-  public BookController(BookListByAuthor bookListByAuthor,
-      BookByIsbn bookByIsbn) {
-    this.bookListByAuthor = bookListByAuthor;
-    this.bookByIsbn = bookByIsbn;
+  public BookController(FindBookListByAuthor findBookListByAuthor,
+      FindBookByIsbn findBookByIsbn) {
+    this.findBookListByAuthor = findBookListByAuthor;
+    this.findBookByIsbn = findBookByIsbn;
   }
 
   @RequestMapping(value = "/books", method = RequestMethod.GET)
   public Collection<BookOutputData> booksByAuthor(@RequestParam(value = "author") String author) {
     LOGGER.info("Retrieving Books of: {}", author);
     try {
-      return bookListByAuthor.getBooks(BookListByAuthorInputData.builder().author(author).build());
+      return findBookListByAuthor.getBooks(BookListByAuthorInputData.builder().author(author).build());
     } catch (BooksNotFoundException exception) {
       LOGGER.info("Books of {} not found", author);
       throw new NotFoundException();
@@ -45,7 +45,7 @@ public class BookController {
   public BookOutputData booksByIsbn(@PathVariable Long isbn) {
     LOGGER.info("Retrieving Book by ISBN: {}", isbn);
     try {
-      return bookByIsbn.getBook(BookByIsbnInputData.builder().isbn(isbn).build());
+      return findBookByIsbn.getBook(BookByIsbnInputData.builder().isbn(isbn).build());
     } catch (BooksNotFoundException exception) {
       LOGGER.info("Book with ISBN {}, not found", isbn);
       throw new NotFoundException();

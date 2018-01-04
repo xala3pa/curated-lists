@@ -6,8 +6,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.xala3pa.books.boundary.BookByIsbn;
-import com.xala3pa.books.boundary.BookListByAuthor;
+import com.xala3pa.books.boundary.FindBookByIsbn;
+import com.xala3pa.books.boundary.FindBookListByAuthor;
 import com.xala3pa.books.exception.BooksNotFoundException;
 import com.xala3pa.books.inputData.BookByIsbnInputData;
 import com.xala3pa.books.inputData.BookListByAuthorInputData;
@@ -41,10 +41,10 @@ public class BookControllerTest {
   private MockMvc mockMvc;
 
   @MockBean
-  private BookListByAuthor bookListByAuthor;
+  private FindBookListByAuthor findBookListByAuthor;
 
   @MockBean
-  private BookByIsbn bookByIsbn;
+  private FindBookByIsbn findBookByIsbn;
 
   private BookOutputData bookOutputData = BookOutputData.builder()
       .author(ROBERT_C_MARTIN)
@@ -58,7 +58,7 @@ public class BookControllerTest {
 
     List<BookOutputData> bookOutputDataList = Collections.singletonList(bookOutputData);
 
-    when(bookListByAuthor.getBooks(books)).thenReturn(bookOutputDataList);
+    when(findBookListByAuthor.getBooks(books)).thenReturn(bookOutputDataList);
 
     this.mockMvc.perform(get(BOOK_BY_AUTHOR_URL_TEMPLATE))
         .andExpect(status().isOk())
@@ -69,7 +69,7 @@ public class BookControllerTest {
   public void should_return_BooksNotFoundException_when_no_books_found_by_author()
       throws Exception {
 
-    when(bookListByAuthor.getBooks(any(BookListByAuthorInputData.class)))
+    when(findBookListByAuthor.getBooks(any(BookListByAuthorInputData.class)))
         .thenThrow(new BooksNotFoundException());
 
     this.mockMvc.perform(get(BOOK_BY_AUTHOR_URL_TEMPLATE))
@@ -80,7 +80,7 @@ public class BookControllerTest {
   public void should_return_book_by_isbn() throws Exception {
     BookByIsbnInputData book = BookByIsbnInputData.builder().isbn(ISBN).build();
 
-    when(bookByIsbn.getBook(book)).thenReturn(bookOutputData);
+    when(findBookByIsbn.getBook(book)).thenReturn(bookOutputData);
 
     this.mockMvc.perform(get(BOOK_BY_ISBN_URL_TEMPLATE))
         .andExpect(status().isOk())
@@ -91,7 +91,7 @@ public class BookControllerTest {
   @Test
   public void should_return_BooksNotFoundException_when_no_books_found_by_isbn() throws Exception {
 
-    when(bookByIsbn.getBook(any(BookByIsbnInputData.class)))
+    when(findBookByIsbn.getBook(any(BookByIsbnInputData.class)))
         .thenThrow(new BooksNotFoundException());
 
     this.mockMvc.perform(get(BOOK_BY_ISBN_URL_TEMPLATE))

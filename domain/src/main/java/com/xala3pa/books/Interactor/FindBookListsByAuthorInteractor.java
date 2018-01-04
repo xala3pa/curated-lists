@@ -1,7 +1,7 @@
 package com.xala3pa.books.Interactor;
 
 import com.xala3pa.books.Book;
-import com.xala3pa.books.boundary.BookListByAuthor;
+import com.xala3pa.books.boundary.FindBookListByAuthor;
 import com.xala3pa.books.exception.BooksNotFoundException;
 import com.xala3pa.books.gateway.BookGateway;
 import com.xala3pa.books.inputData.BookListByAuthorInputData;
@@ -9,13 +9,12 @@ import com.xala3pa.books.outputData.BookOutputData;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import jdk.nashorn.internal.ir.Optimistic;
 
-public class GetBookListsByAuthor implements BookListByAuthor {
+public class FindBookListsByAuthorInteractor implements FindBookListByAuthor {
 
   private BookGateway bookGateway;
 
-  public GetBookListsByAuthor(BookGateway bookGateway) {
+  public FindBookListsByAuthorInteractor(BookGateway bookGateway) {
     this.bookGateway = bookGateway;
   }
 
