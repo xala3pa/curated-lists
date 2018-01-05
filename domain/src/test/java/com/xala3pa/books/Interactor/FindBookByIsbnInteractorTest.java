@@ -1,5 +1,6 @@
 package com.xala3pa.books.Interactor;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
@@ -7,6 +8,7 @@ import com.xala3pa.books.Book;
 import com.xala3pa.books.BookCategory;
 import com.xala3pa.books.BookStatus;
 import com.xala3pa.books.gateway.BookGateway;
+import com.xala3pa.books.inputData.BookByIsbnInputData;
 import com.xala3pa.books.inputData.BookListByAuthorInputData;
 import com.xala3pa.books.outputData.BookOutputData;
 import java.util.Collections;
@@ -19,10 +21,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
-import static org.assertj.core.api.Assertions.*;
 
 @RunWith(MockitoJUnitRunner.class)
-public class FindBookListsByAuthorInteractorTest {
+public class FindBookByIsbnInteractorTest {
 
   private static final long ISBN = 9780134494166L;
   private static final String ROBERT_C_MARTIN = "Robert C. Martin";
@@ -34,7 +35,8 @@ public class FindBookListsByAuthorInteractorTest {
   private BookGateway bookGateway;
 
   @InjectMocks
-  private FindBookListsByAuthorInteractor findBookListsByAuthorInteractor = new FindBookListsByAuthorInteractor(bookGateway);
+  private FindBookByIsbnInteractor findBookByIsbnInteractor = new FindBookByIsbnInteractor(
+      bookGateway);
 
   @Before
   public void setUp() {
@@ -51,19 +53,18 @@ public class FindBookListsByAuthorInteractorTest {
   }
 
   @Test
-  public void should_return_list_of_books_by_author() {
+  public void should_return_a_book_when_we_search_by_isbn() throws Exception {
 
-    BookListByAuthorInputData bookListByAuthorInputData = BookListByAuthorInputData.builder()
-        .author(ROBERT_C_MARTIN)
+    BookByIsbnInputData bookByIsbnInputData = BookByIsbnInputData.builder()
+        .isbn(ISBN)
         .build();
 
-    Optional<List<Book>> books = Optional.of(Collections.singletonList(cleanArchitectureBook));
+    Optional<Book> book = Optional.of(cleanArchitectureBook);
 
-    when(bookGateway.findByAuthor(any(String.class))).thenReturn(books);
+        when(bookGateway.getBookByIsbn(any(Long.class))).thenReturn(book);
 
-    List<BookOutputData> bookOutputData =  findBookListsByAuthorInteractor.getBooks(bookListByAuthorInputData);
+    BookOutputData bookOutputData = findBookByIsbnInteractor.getBook(bookByIsbnInputData);
 
-    assertThat(bookOutputData.size()).isNotZero();
-    assertThat(bookOutputData.get(0).getAuthor()).isEqualTo(ROBERT_C_MARTIN);
+    assertThat(bookOutputData).isEqualToComparingFieldByField(cleanArchitectureBook.mapToBookOutputData());
   }
 }
