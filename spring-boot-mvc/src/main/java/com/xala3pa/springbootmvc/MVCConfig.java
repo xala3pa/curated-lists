@@ -1,6 +1,8 @@
 package com.xala3pa.springbootmvc;
 
+import com.xala3pa.books.Interactor.FindAllBooksInteractor;
 import com.xala3pa.books.Interactor.FindBookByIsbnInteractor;
+import com.xala3pa.books.boundary.FindAllBooks;
 import com.xala3pa.books.boundary.FindBookByIsbn;
 import com.xala3pa.books.boundary.FindBookListByAuthor;
 import com.xala3pa.books.Interactor.FindBookListsByAuthorInteractor;
@@ -23,5 +25,10 @@ public class MVCConfig {
   @Bean
   FindBookByIsbn bookByIsbn(BookGateway bookGateway) {
     return new FindBookByIsbnInteractor(bookGateway);
+  }
+
+  @Bean
+  FindAllBooks allBooks(BookGateway bookGateway) {
+    return new FindAllBooksInteractor(bookGateway);
   }
 }

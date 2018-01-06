@@ -1,11 +1,15 @@
 package com.xala3pa.springbootmvc.books.controller;
 
+import static org.hamcrest.Matchers.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.xala3pa.books.BookCategory;
+import com.xala3pa.books.BookStatus;
+import com.xala3pa.books.boundary.FindAllBooks;
 import com.xala3pa.books.boundary.FindBookByIsbn;
 import com.xala3pa.books.boundary.FindBookListByAuthor;
 import com.xala3pa.books.exception.BooksNotFoundException;
@@ -13,10 +17,12 @@ import com.xala3pa.books.inputData.BookByIsbnInputData;
 import com.xala3pa.books.inputData.BookListByAuthorInputData;
 import com.xala3pa.books.outputData.BookOutputData;
 import com.xala3pa.springbootmvc.MVCConfig;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Matchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,11 +37,14 @@ import org.springframework.test.web.servlet.MockMvc;
 @ContextConfiguration(classes = {MVCConfig.class})
 public class BookControllerTest {
 
-  private static final String ROBERT_C_MARTIN = "Robert C. Martin";
   private static final String BOOK_BY_AUTHOR_URL_TEMPLATE = "/books?author=Robert C. Martin";
-  private static final String BOOK_BY_ISBN_URL_TEMPLATE = "/1213174625386/book";
-  private static final String BOOK_TITLE = "Clean Architecture";
-  private static final long ISBN = 1213174625386L;
+  private static final String BOOK_BY_ISBN_URL_TEMPLATE = "/9780134494166/book";
+  private static final String BOOKS_URL_TEMPLATE = "/books";
+  private static final String ROBERT_C_MARTIN = "Robert C. Martin";
+  private static final String CLEAN_ARCHITECTURE = "Clean Architecture";
+  private static final long ISBN_CLEAN_ARCH = 9780134494166L;
+  private static final String CLEAN_CODE = "Clean code";
+  private static final Long ISBN_CLEAN_CODE = 1973618361543L;
 
   @Autowired
   private MockMvc mockMvc;
@@ -46,23 +55,39 @@ public class BookControllerTest {
   @MockBean
   private FindBookByIsbn findBookByIsbn;
 
-  private BookOutputData bookOutputData = BookOutputData.builder()
+  @MockBean
+  private FindAllBooks findAllBooks;
+
+  private BookOutputData cleanArchitectureBook = BookOutputData.builder()
+      .title(CLEAN_ARCHITECTURE)
+      .isbn(ISBN_CLEAN_ARCH)
       .author(ROBERT_C_MARTIN)
-      .title(BOOK_TITLE)
-      .isbn(ISBN).build();
+      .description("Clean Architecture, a Craftsman's Guide to Software Structure and Design")
+      .bookCategory(BookCategory.TECHNICAL)
+      .bookStatus(BookStatus.READING)
+      .build();
+
+  private BookOutputData cleanCodeBook = BookOutputData.builder()
+      .title(CLEAN_CODE)
+      .isbn(ISBN_CLEAN_CODE)
+      .author(ROBERT_C_MARTIN)
+      .description("Clean Code, a handbook of Agile Software Craftsmanship")
+      .bookCategory(BookCategory.TECHNICAL)
+      .bookStatus(BookStatus.READ)
+      .build();
 
   @Test
   public void should_return_books_by_author() throws Exception {
     BookListByAuthorInputData books = BookListByAuthorInputData.builder().author(ROBERT_C_MARTIN)
         .build();
 
-    List<BookOutputData> bookOutputDataList = Collections.singletonList(bookOutputData);
+    List<BookOutputData> bookOutputDataList = Collections.singletonList(cleanArchitectureBook);
 
     when(findBookListByAuthor.getBooks(books)).thenReturn(bookOutputDataList);
 
     this.mockMvc.perform(get(BOOK_BY_AUTHOR_URL_TEMPLATE))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$[0].title").value(BOOK_TITLE));
+        .andExpect(jsonPath("$[0].title").value(CLEAN_ARCHITECTURE));
   }
 
   @Test
@@ -78,14 +103,14 @@ public class BookControllerTest {
 
   @Test
   public void should_return_book_by_isbn() throws Exception {
-    BookByIsbnInputData book = BookByIsbnInputData.builder().isbn(ISBN).build();
+    BookByIsbnInputData book = BookByIsbnInputData.builder().isbn(ISBN_CLEAN_ARCH).build();
 
-    when(findBookByIsbn.getBook(book)).thenReturn(bookOutputData);
+    when(findBookByIsbn.getBook(book)).thenReturn(cleanArchitectureBook);
 
     this.mockMvc.perform(get(BOOK_BY_ISBN_URL_TEMPLATE))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.title").value(BOOK_TITLE))
-        .andExpect(jsonPath("$.isbn").value(ISBN));
+        .andExpect(jsonPath("$.title").value(CLEAN_ARCHITECTURE))
+        .andExpect(jsonPath("$.isbn").value(ISBN_CLEAN_ARCH));
   }
 
   @Test
@@ -95,6 +120,26 @@ public class BookControllerTest {
         .thenThrow(new BooksNotFoundException());
 
     this.mockMvc.perform(get(BOOK_BY_ISBN_URL_TEMPLATE))
+        .andExpect(status().isNotFound());
+  }
+
+  @Test
+  public void should_return_all_books() throws Exception {
+
+    when(findAllBooks.getBooks()).thenReturn(Arrays.asList(cleanArchitectureBook,cleanCodeBook));
+
+    this.mockMvc.perform(get(BOOKS_URL_TEMPLATE))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$", hasSize(2)));
+  }
+
+  @Test
+  public void should_return_BooksNotFoundException_when_no_books_found() throws Exception {
+
+    when(findAllBooks.getBooks())
+        .thenThrow(new BooksNotFoundException());
+
+    this.mockMvc.perform(get(BOOKS_URL_TEMPLATE))
         .andExpect(status().isNotFound());
   }
 }
