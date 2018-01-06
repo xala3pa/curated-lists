@@ -21,10 +21,15 @@ public class JpaBookEntityGateway implements BookGateway {
     this.bookRepository = bookRepository;
   }
 
-  public List<Book> findAll() {
+  public Optional<List<Book>> findAll() {
     List<Book> books = new ArrayList<>();
     bookRepository.findAll().forEach(bookEntity -> books.add(bookEntity.mapToBook()));
-    return books;
+
+    if (books.isEmpty()) {
+      return Optional.empty();
+    }
+
+    return Optional.of(books);
   }
 
   @Override
