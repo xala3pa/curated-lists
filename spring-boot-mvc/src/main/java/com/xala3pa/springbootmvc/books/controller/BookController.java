@@ -12,6 +12,8 @@ import java.util.Collection;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -34,7 +36,8 @@ public class BookController {
   }
 
   @GetMapping(value = "/books")
-  public Collection<BookOutputData> booksByAuthor(@RequestParam(value = "author") Optional<String> author) {
+  public Collection<BookOutputData> booksByAuthor(
+      @RequestParam(value = "author") Optional<String> author) {
     try {
       if (!author.isPresent()) {
         LOGGER.info("Retrieving All Books...");
@@ -51,10 +54,15 @@ public class BookController {
   }
 
   @GetMapping(value = "/{isbn}/book")
-  public BookOutputData booksByIsbn(@PathVariable Long isbn) {
+  public ResponseEntity<BookOutputData> booksByIsbn(@PathVariable Long isbn) {
     LOGGER.info("Retrieving Book by ISBN: {}", isbn);
     try {
-      return findBookByIsbn.getBook(BookByIsbnInputData.builder().isbn(isbn).build());
+      BookOutputData bookOutputData = findBookByIsbn
+          .getBook(BookByIsbnInputData.builder().isbn(isbn).build());
+
+      return Optional.ofNullable(bookOutputData)
+          .map(book -> new ResponseEntity<>(book, HttpStatus.OK))
+          .orElseThrow(NotFoundException::new);
     } catch (BooksNotFoundException exception) {
       LOGGER.info("Book with ISBN {}, not found", isbn);
       throw new NotFoundException();
