@@ -21,6 +21,11 @@ public class JpaBookEntityGateway implements BookGateway {
     this.bookRepository = bookRepository;
   }
 
+  @Override
+  public Book save(Book book) {
+    return bookRepository.save(BookEntity.mapFromBook(book)).mapToBook();
+  }
+
   public Optional<List<Book>> findAll() {
     List<Book> books = new ArrayList<>();
     bookRepository.findAll().forEach(bookEntity -> books.add(bookEntity.mapToBook()));

@@ -39,4 +39,16 @@ public class BookEntity {
         .consumed(getConsumed())
         .dateAdded(getDateAdded()).build();
   }
+
+  public static BookEntity mapFromBook(Book book) {
+    return BookEntity.builder()
+        .isbn(book.getIsbn())
+        .title(book.getTitle())
+        .author(book.getAuthor())
+        .description(book.getDescription())
+        .bookCategory(BookEntityCategory.valueOf(book.getBookCategory().name()))
+        .bookStatus(BookEntityStatus.valueOf(book.getBookStatus().name()))
+        .consumed(book.getConsumed())
+        .dateAdded(book.getDateAdded()).build();
+  }
 }
