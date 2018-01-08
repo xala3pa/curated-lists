@@ -25,6 +25,7 @@ public class Book {
   public BookOutputData mapToBookOutputData() {
     return BookOutputData.builder()
         .isbn(getIsbn())
+        .title(getTitle())
         .author(getAuthor())
         .description(getDescription())
         .bookCategory(BookCategory.valueOf(getBookCategory().name()))
