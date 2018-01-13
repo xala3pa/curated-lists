@@ -157,7 +157,15 @@ public class BookControllerTest {
         .andExpect(jsonPath("$.title").value(CLEAN_ARCHITECTURE))
         .andExpect(jsonPath("$.isbn").value(ISBN_CLEAN_ARCH))
         .andExpect(status().isCreated())
-
         .andReturn();
+  }
+
+  @Test
+  public void should_return_an_exception_saving_a_book_with_a_bad_request() throws Exception {
+
+    this.mockMvc.perform(post(BOOK_SAVE_BY_ISBN_URL_TEMPLATE, ISBN_CLEAN_ARCH)
+        .contentType(MediaType.APPLICATION_JSON_UTF8)
+        .content("{'isbn':,121212131212312}"))
+        .andExpect(status().isBadRequest());
   }
 }
