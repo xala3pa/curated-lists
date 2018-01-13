@@ -154,7 +154,10 @@ public class BookControllerTest {
     this.mockMvc.perform(post(BOOK_SAVE_BY_ISBN_URL_TEMPLATE, ISBN_CLEAN_ARCH)
         .contentType(MediaType.APPLICATION_JSON_UTF8)
         .content(mapper.writeValueAsString(cleanArchitectureBook)))
+        .andExpect(jsonPath("$.title").value(CLEAN_ARCHITECTURE))
+        .andExpect(jsonPath("$.isbn").value(ISBN_CLEAN_ARCH))
         .andExpect(status().isCreated())
+
         .andReturn();
   }
 }
