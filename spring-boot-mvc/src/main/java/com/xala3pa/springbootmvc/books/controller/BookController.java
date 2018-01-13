@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -85,7 +84,7 @@ public class BookController {
   @PostMapping("/{isbn}/book")
   public ResponseEntity<?> saveBook(@PathVariable Long isbn,
       @Valid @RequestBody BookInputData bookInputData) {
-
+    LOGGER.info("Saving  a new book with isbn {}", isbn);
     bookInputData.setIsbn(isbn);
     return new ResponseEntity<>(saveBook.save(bookInputData).mapToBookOutputData(),
         HttpStatus.CREATED);
@@ -94,6 +93,7 @@ public class BookController {
   @ExceptionHandler
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   public ErrorResponse handleException(MethodArgumentNotValidException exception) {
+    LOGGER.info("Bad request error...");
 
     String errorMsg = exception.getBindingResult().getFieldErrors().stream()
         .map(DefaultMessageSourceResolvable::getDefaultMessage)
