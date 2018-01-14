@@ -21,8 +21,6 @@ import lombok.NoArgsConstructor;
 public class BookEntity {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
   private Long isbn;
   private String title;
   private String description;

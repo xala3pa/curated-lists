@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -86,6 +87,24 @@ public class BookController {
       @Valid @RequestBody BookInputData bookInputData) {
     LOGGER.info("Saving  a new book with isbn {}", isbn);
     bookInputData.setIsbn(isbn);
+    return persistBook(bookInputData);
+  }
+
+  @PutMapping("/{isbn}/book")
+  public ResponseEntity<?> updateBook(@PathVariable Long isbn,
+      @Valid @RequestBody BookInputData bookInputData) {
+
+    try {
+      LOGGER.info("updating a book with isbn {}", isbn);
+      findBookByIsbn.getBook(BookByIsbnInputData.builder().isbn(isbn).build());
+    } catch (BooksNotFoundException exception) {
+      LOGGER.info("Book doesn't exist, saving a new book with isbn {}", isbn);
+    }
+    bookInputData.setIsbn(isbn);
+    return persistBook(bookInputData);
+  }
+
+  private ResponseEntity<?> persistBook(BookInputData bookInputData) {
     return new ResponseEntity<>(saveBook.save(bookInputData).mapToBookOutputData(),
         HttpStatus.CREATED);
   }
